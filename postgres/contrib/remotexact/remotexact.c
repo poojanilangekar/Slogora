@@ -6,6 +6,7 @@
 #include "fmgr.h"
 #include "libpq-fe.h"
 #include "libpq/pqformat.h"
+#include "miscadmin.h"
 #include "storage/predicate.h"
 #include "utils/guc.h"
 #include "utils/hsearch.h"
@@ -318,6 +319,9 @@ static const RemoteXactHook remote_xact_hook =
 void
 _PG_init(void)
 {
+	if (!process_shared_preload_libraries_in_progress)
+		return;
+
 	DefineCustomStringVariable("remotexact.connstring",
 							   "connection string to the transaction server",
 							   NULL,
